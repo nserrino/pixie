@@ -11,13 +11,25 @@
       "type": "PX_NODE",
       "description": "The node name to filter on",
       "defaultValue": ""
+    },
+    {
+      "name": "groupby",
+      "type": "PX_STRING",
+      "description": "The element to groupby",
+      "defaultValue": "node",
+      "validValues": [
+        "node",
+        "service",
+        "pod",
+        "namespace"
+      ]
     }
   ],
   "globalFuncs": [
     {
-      "outputName": "process_stats",
+      "outputName": "resource_timeseries",
       "func": {
-        "name": "process_stats",
+        "name": "resource_timeseries",
         "args": [
           {
             "name": "start_time",
@@ -26,6 +38,10 @@
           {
             "name": "node",
             "variable": "node"
+          },
+          {
+            "name": "groupby",
+            "variable": "groupby"
           }
         ]
       }
@@ -42,6 +58,10 @@
           {
             "name": "node",
             "variable": "node"
+          },
+          {
+            "name": "groupby",
+            "variable": "groupby"
           }
         ]
       }
@@ -74,73 +94,76 @@
       }
     },
     {
-      "name": "CPU %",
+      "name": "CPU Usage",
       "position": {
         "x": 8,
         "y": 0,
         "w": 4,
         "h": 3
       },
-      "globalFuncOutputName": "process_stats",
+      "globalFuncOutputName": "resource_timeseries",
       "displaySpec": {
         "@type": "pixielabs.ai/pl.vispb.TimeseriesChart",
         "timeseries": [
           {
-            "value": "cpu_pct",
-            "mode": "MODE_LINE"
+            "value": "cpu_usage",
+            "mode": "MODE_LINE",
+            "series": "groupby_col"
           }
         ],
         "title": "",
         "yAxis": {
-          "label": "CPU usage (%)"
+          "label": "CPU usage"
         },
         "xAxis": null
       }
     },
     {
-      "name": "Bytes read (MB/s)",
+      "name": "Bytes read",
       "position": {
         "x": 0,
         "y": 3,
         "w": 4,
         "h": 3
       },
-      "globalFuncOutputName": "process_stats",
+      "globalFuncOutputName": "resource_timeseries",
       "displaySpec": {
         "@type": "pixielabs.ai/pl.vispb.TimeseriesChart",
         "timeseries": [
           {
-            "value": "rchar_mb",
-            "mode": "MODE_LINE"
+            "value": "total_disk_read_throughput",
+            "mode": "MODE_LINE",
+            "series": "groupby_col"
           }
         ],
         "title": "",
         "yAxis": {
-          "label": "Bytes read (MB/s)"
+          "label": "Bytes read"
         },
         "xAxis": null
       }
     },
     {
-      "name": "Bytes written (MB/s)",
+      "name": "Bytes written",
       "position": {
         "x": 4,
         "y": 3,
         "w": 4,
         "h": 3
       },
-      "globalFuncOutputName": "process_stats",
+      "globalFuncOutputName": "resource_timeseries",
       "displaySpec": {
         "@type": "pixielabs.ai/pl.vispb.TimeseriesChart",
         "timeseries": [
           {
-            "value": "wchar_mb",
-            "mode": "MODE_LINE"
+            "value": "total_disk_write_throughput",
+            "mode": "MODE_LINE",
+            "series": "groupby_col"
           }
         ],
         "title": "",
         "yAxis": {
-          "label": "Bytes written (MB/s)"
+          "label": "Bytes written"
         },
         "xAxis": null
       }
@@ -158,13 +181,14 @@
         "@type": "pixielabs.ai/pl.vispb.TimeseriesChart",
         "timeseries": [
           {
-            "value": "tx_mb_per_s",
-            "mode": "MODE_LINE"
+            "value": "tx_bytes_per_ns",
+            "mode": "MODE_LINE",
+            "series": "groupby_col"
           }
         ],
         "title": "",
         "yAxis": {
-          "label": "Sent Data (MB/s)"
+          "label": "Sent Data"
         },
         "xAxis": null
       }
@@ -182,61 +206,66 @@
         "@type": "pixielabs.ai/pl.vispb.TimeseriesChart",
         "timeseries": [
           {
-            "value": "rx_mb_per_s",
-            "mode": "MODE_LINE"
+            "value": "rx_bytes_per_ns",
+            "mode": "MODE_LINE",
+            "series": "groupby_col"
           }
         ],
         "title": "",
         "yAxis": {
-          "label": "Received Data (MB/s)"
+          "label": "Received Data"
         },
         "xAxis": null
       }
     },
     {
-      "name": "Resident Set Size (MB)",
+      "name": "Resident Set Size",
       "position": {
         "x": 4,
         "y": 6,
         "w": 4,
         "h": 3
       },
-      "globalFuncOutputName": "process_stats",
+      "globalFuncOutputName": "resource_timeseries",
       "displaySpec": {
         "@type": "pixielabs.ai/pl.vispb.TimeseriesChart",
         "timeseries": [
           {
-            "value": "rss_mb",
-            "mode": "MODE_LINE"
+            "value": "rss",
+            "mode": "MODE_LINE",
+            "series": "groupby_col",
+            "stackBySeries": false
           }
         ],
         "title": "",
         "yAxis": {
-          "label": "Resident Memory Usage (mb)"
+          "label": "Resident Memory Usage"
         },
         "xAxis": null
       }
     },
     {
-      "name": "Virtual Memory Size (MB)",
+      "name": "Virtual Memory Size",
       "position": {
         "x": 8,
         "y": 6,
         "w": 4,
         "h": 3
       },
-      "globalFuncOutputName": "process_stats",
+      "globalFuncOutputName": "resource_timeseries",
       "displaySpec": {
         "@type": "pixielabs.ai/pl.vispb.TimeseriesChart",
         "timeseries": [
           {
-            "value": "vsize_mb",
-            "mode": "MODE_LINE"
+            "value": "vsize",
+            "mode": "MODE_LINE",
+            "series": "groupby_col",
+            "stackBySeries": false
           }
         ],
         "title": "",
         "yAxis": {
-          "label": "Virtual Memory Usage (MB)"
+          "label": "Virtual Memory Usage"
         },
         "xAxis": null
       }
